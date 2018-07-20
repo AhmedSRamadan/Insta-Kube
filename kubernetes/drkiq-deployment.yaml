@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.1.0 (36652f6)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: drkiq
+  name: drkiq
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: drkiq
+    spec:
+      containers:
+      - args:
+        - bundle
+        - exec
+        - unicorn
+        - -c
+        - config/unicorn.rb
+        env:
+        - name: CACHE_URL
+          value: redis://redis:6379/0
+        - name: DATABASE_URL
+          value: postgresql://drkiq:yourpassword@10.0.0.5:5432/drkiq?encoding=utf8&pool=5&timeout=5000
+        - name: JOB_WORKER_URL
+          value: redis://redis:6379/0
+        - name: LISTEN_ON
+          value: 0.0.0.0:8000
+        - name: SECRET_TOKEN
+          value: a9c4853412c560983a37308a54c7164ea77c9b8c47d48b13d59c759d27ee07380e0521b4a480ada9f5de5451679332c23c27ec68dd8967b477f658c04a14c198
+        - name: WORKER_PROCESSES
+          value: "1"
+        image: drkiq
+        name: drkiq
+        ports:
+        - containerPort: 8000
+        resources: {}
+        volumeMounts:
+        - mountPath: /drkiq
+          name: drkiq-claim0
+      restartPolicy: Always
+      volumes:
+      - name: drkiq-claim0
+        persistentVolumeClaim:
+          claimName: drkiq-claim0
+status: {}
