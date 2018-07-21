@@ -38,7 +38,7 @@ spec:
           value: a9c4853412c560983a37308a54c7164ea77c9b8c47d48b13d59c759d27ee07380e0521b4a480ada9f5de5451679332c23c27ec68dd8967b477f658c04a14c198
         - name: WORKER_PROCESSES
           value: "1"
-        image: sidekiq
+        image: ahmedsramadan/sidekiq
         name: sidekiq
         resources: {}
         volumeMounts:
